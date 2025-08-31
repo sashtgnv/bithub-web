@@ -7,12 +7,17 @@ import com.example.demo.services.ProjectService;
 import com.example.demo.utils.ProjectSaver;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +32,7 @@ public class ProjectController {
     @PostMapping(value = "/api/projects", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createNewProject(@ModelAttribute ProjectDTO projectRequest) throws IOException {
         MultipartFile sourceFile = projectRequest.getFile();
-        String fileName = UUID.randomUUID().toString();
+        String fileName = sourceFile.getOriginalFilename();
 
         Project projectData = new Project(
                 projectRequest.getName(),
@@ -59,11 +64,11 @@ public class ProjectController {
     @GetMapping(value = "/api/projects/download")
     public ResponseEntity<FileSystemResource> getProjectFileById(@RequestParam Long id) {
         Project projectData = projectService.findProjectById(id);
-        Long userId = projectData.getOwnerUser().getId();
 
         FileSystemResource file = new FileSystemResource(projectData.getPath());
+        ContentDisposition contentDisposition = ContentDisposition.attachment().filename(file.getFilename(), StandardCharsets.UTF_8).build();
         return file.exists() ?
-                ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\""+file.getFilename()+ "\"")
+                ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
                 .body(new FileSystemResource(file.getPath())) : ResponseEntity.notFound().build();
     }
 }
