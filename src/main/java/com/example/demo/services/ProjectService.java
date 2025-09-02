@@ -16,9 +16,11 @@ public class ProjectService {
     private final ProjectRepository repository;
 
     public boolean createProject(Project project) {
-        project.setCreatedAt(LocalDateTime.now());
-        repository.save(project);
-        return true;
+        if (repository.findProjectByOwnerUserAndName(project.getOwnerUser(),project.getName())!=null) {
+            project.setCreatedAt(LocalDateTime.now());
+            repository.save(project);
+            return true;
+        } else return false;
     }
 
     public List<Project> findProjectsByOwner(User owner) {
@@ -27,5 +29,14 @@ public class ProjectService {
 
     public Project findProjectById(Long id) {
         return repository.findProjectById(id);
+    }
+
+    public Project findProjectByOwnerUserAndName(User ownerUser, String name) {
+        return repository.findProjectByOwnerUserAndName(ownerUser,name);
+    }
+
+    public boolean update(Project project) {
+        repository.save(project);
+        return true;
     }
 }

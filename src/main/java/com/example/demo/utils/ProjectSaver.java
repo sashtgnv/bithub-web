@@ -17,7 +17,7 @@ public class ProjectSaver {
 
     private String uploadDir;
 
-    public String save(Long ownerId,String name, InputStream inputStream) throws IOException {
+    public String saveNew(Long ownerId, String name, InputStream inputStream) throws IOException {
         String projectUUID = UUID.randomUUID().toString();
         Path pathToProjDir = Paths.get(uploadDir + '/' + ownerId + '/' + projectUUID);
 
@@ -29,5 +29,17 @@ public class ProjectSaver {
         Files.copy(inputStream, pathToFile, StandardCopyOption.REPLACE_EXISTING);
 
         return pathToFile.toString();
+    }
+
+    public String update(String path, InputStream inputStream, String filename) throws IOException {
+        Path pathToFile = Paths.get(path);
+        if (Files.exists(pathToFile)) {
+            Files.copy(inputStream, pathToFile, StandardCopyOption.REPLACE_EXISTING);
+            String newPath = path.substring(0, path.lastIndexOf('/')) + '/' + filename;
+            Files.move(pathToFile, Paths.get(newPath));
+            return newPath;
+        } else {
+            throw new IOException();
+        }
     }
 }

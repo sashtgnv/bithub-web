@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.models.Project;
 import com.example.demo.models.ProjectDTO;
 import com.example.demo.models.User;
+import com.example.demo.repositories.ProjectRepository;
 import com.example.demo.services.ProjectService;
 import com.example.demo.utils.ProjectSaver;
 import lombok.AllArgsConstructor;
@@ -16,10 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -28,9 +26,10 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ProjectSaver saver;
     private final String uploadDir;
+    private final ProjectRepository projectRepository;
 
     @PostMapping(value = "/api/projects", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createNewProject(@ModelAttribute ProjectDTO projectRequest) throws IOException {
+    public ResponseEntity<?> createNewProject(@ModelAttribute ProjectDTO projectRequest) {
         MultipartFile sourceFile = projectRequest.getFile();
         String fileName = sourceFile.getOriginalFilename();
 
@@ -40,10 +39,31 @@ public class ProjectController {
                 projectRequest.getIsPublic(),
                 new User(projectRequest.getOwnerUserId())
         );
-        String filePath = saver.save(projectRequest.getOwnerUserId(), fileName, sourceFile.getInputStream());
-        projectData.setPath(filePath);
+        try {
+            String filePath = saver.saveNew(projectRequest.getOwnerUserId(), fileName, sourceFile.getInputStream());
+            projectData.setPath(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
         return projectService.createProject(projectData) ?
-                ResponseEntity.ok("ура") : ResponseEntity.badRequest().build();
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping(value = "/api/projects")
+    public ResponseEntity<?> updateProject(@ModelAttribute ProjectDTO projectRequest){
+        MultipartFile sourceFile = projectRequest.getFile();
+        Project project = projectService.findProjectByOwnerUserAndName(new User(projectRequest.getOwnerUserId()) , projectRequest.getName());
+
+        try {
+            String newPath = saver.update(project.getPath(), sourceFile.getInputStream(), sourceFile.getOriginalFilename());
+            project.setPath(newPath);
+            projectService.update(project);
+            return ResponseEntity.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
 
     }
 
