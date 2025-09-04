@@ -16,7 +16,7 @@ public class ProjectService {
     private final ProjectRepository repository;
 
     public boolean createProject(Project project) {
-        if (repository.findProjectByOwnerUserAndName(project.getOwnerUser(),project.getName())!=null) {
+        if (repository.findProjectByOwnerUserAndName(project.getOwnerUser(),project.getName())==null) {
             project.setCreatedAt(LocalDateTime.now());
             repository.save(project);
             return true;

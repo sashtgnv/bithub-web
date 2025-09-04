@@ -39,30 +39,35 @@ public class ProjectController {
                 projectRequest.getIsPublic(),
                 new User(projectRequest.getOwnerUserId())
         );
-        try {
-            String filePath = saver.saveNew(projectRequest.getOwnerUserId(), fileName, sourceFile.getInputStream());
-            projectData.setPath(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
+        if (!sourceFile.isEmpty()) {
+            try {
+                String filePath = saver.saveNew(projectRequest.getOwnerUserId(), fileName, sourceFile.getInputStream());
+                projectData.setPath(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.internalServerError().build();
+            }
         }
         return projectService.createProject(projectData) ?
                 ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @PatchMapping(value = "/api/projects")
-    public ResponseEntity<?> updateProject(@ModelAttribute ProjectDTO projectRequest){
+    public ResponseEntity<?> updateProject(@ModelAttribute ProjectDTO projectRequest) {
         MultipartFile sourceFile = projectRequest.getFile();
-        Project project = projectService.findProjectByOwnerUserAndName(new User(projectRequest.getOwnerUserId()) , projectRequest.getName());
 
         try {
+            Project project = projectService.findProjectByOwnerUserAndName(new User(projectRequest.getOwnerUserId()), projectRequest.getName());
             String newPath = saver.update(project.getPath(), sourceFile.getInputStream(), sourceFile.getOriginalFilename());
             project.setPath(newPath);
             projectService.update(project);
             return ResponseEntity.ok().build();
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
+        } catch (NullPointerException e) {
+//            e.printStackTrace();
+            return ResponseEntity.notFound().build();
         }
 
     }
@@ -84,11 +89,11 @@ public class ProjectController {
     @GetMapping(value = "/api/projects/download")
     public ResponseEntity<FileSystemResource> getProjectFileById(@RequestParam Long id) {
         Project projectData = projectService.findProjectById(id);
-
+        if (projectData.getPath()==null) return ResponseEntity.notFound().build();
         FileSystemResource file = new FileSystemResource(projectData.getPath());
         ContentDisposition contentDisposition = ContentDisposition.attachment().filename(file.getFilename(), StandardCharsets.UTF_8).build();
         return file.exists() ?
                 ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
-                .body(new FileSystemResource(file.getPath())) : ResponseEntity.notFound().build();
+                        .body(new FileSystemResource(file.getPath())) : ResponseEntity.notFound().build();
     }
 }

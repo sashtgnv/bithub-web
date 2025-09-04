@@ -39,6 +39,7 @@ public class ProjectSaver {
             Files.move(pathToFile, Paths.get(newPath));
             return newPath;
         } else {
+            System.out.println("такой файл не найден");
             throw new IOException();
         }
     }
