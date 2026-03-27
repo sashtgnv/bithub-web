@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -18,6 +20,15 @@ public class User {
     private String email;
     @Column
     private String passwordHash;
+    @Column
+    private Boolean isEnabled;
+    @Column
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
     public User (Long id) {
         this.id = id;

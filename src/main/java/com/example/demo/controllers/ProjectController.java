@@ -1,7 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Project;
-import com.example.demo.models.ProjectDTO;
+import com.example.demo.dto.ProjectDto;
 import com.example.demo.models.User;
 import com.example.demo.repositories.ProjectRepository;
 import com.example.demo.services.ProjectService;
@@ -29,7 +29,7 @@ public class ProjectController {
     private final ProjectRepository projectRepository;
 
     @PostMapping(value = "/api/projects", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createNewProject(@ModelAttribute ProjectDTO projectRequest) {
+    public ResponseEntity<?> createNewProject(@ModelAttribute ProjectDto projectRequest) {
         MultipartFile sourceFile = projectRequest.getFile();
         String fileName = sourceFile.getOriginalFilename();
 
@@ -53,7 +53,7 @@ public class ProjectController {
     }
 
     @PatchMapping(value = "/api/projects")
-    public ResponseEntity<?> updateProject(@ModelAttribute ProjectDTO projectRequest) {
+    public ResponseEntity<?> updateProject(@ModelAttribute ProjectDto projectRequest) {
         MultipartFile sourceFile = projectRequest.getFile();
 
         try {
