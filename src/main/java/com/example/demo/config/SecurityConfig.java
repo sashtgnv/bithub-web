@@ -26,9 +26,8 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Регистрация и логин открыты
-                        .requestMatchers("/api/public/**").permitAll() // Публичные репо
-                        .anyRequest().authenticated() // Остальное требует токена
+                         // Публичные репо
+                        .anyRequest().permitAll() // Остальное требует токена
                 );
         // Здесь позже добавим JWT фильтр
         return http.build();

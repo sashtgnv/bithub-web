@@ -10,9 +10,16 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Project findProjectById(Long id);
 
-    Project findProjectByName(String name);
+    List<Project> findProjectsByOwner(User ownerUser);
 
-    List<Project> findProjectByOwnerUser(User ownerUser);
+    Project findProjectByNameAndOwner(String name, User owner);
 
-    Project findProjectByOwnerUserAndName(User ownerUser, String name);
+    // Список репозиториев пользователя
+    List<Project> findByOwnerOrderByCreatedAtDesc(User owner);
+
+    // Публичные репозитории для каталога
+    List<Project> findByIsPublicTrueOrderByCreatedAtDesc();
+
+    // Проверка уникальности имени
+    boolean existsByNameAndOwner(String name, User owner);
 }

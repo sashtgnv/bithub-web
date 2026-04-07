@@ -1,32 +1,41 @@
 package com.example.demo.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@RequiredArgsConstructor
 @Entity
 @Table(name = "projects")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
+    @Column(length = 100)
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
-    private Boolean isPublic;
-    private LocalDateTime createdAt;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_user_id")
-    private User ownerUser;
-    private String path;
+    private User owner;
+    @Column
+    private Boolean isPublic = true;
+    @Column
+    private LocalDateTime createdAt;
 
-    public Project(String name, String description, Boolean isPublic, User ownerUser) {
-        this.name = name;
-        this.description = description;
-        this.isPublic = isPublic;
-        this.ownerUser = ownerUser;
+    @PrePersist
+    void onCreate(){
+        createdAt = LocalDateTime.now();
     }
+
+//    private String path;
+
 }
+
+
