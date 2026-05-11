@@ -49,15 +49,18 @@ public class ProjectController {
 
     // POST /api/proj — создать репозиторий
     @PostMapping
-    public ResponseEntity<Project> create(@Valid @RequestBody ProjectRequest request,
+    public ResponseEntity<Object> create(@Valid @RequestBody ProjectRequest request,
                                           HttpServletRequest req) {
-        System.out.println(123);
-        User owner = getCurrentUser(req);
-        Project project = projectService.createProject(request, owner);
-        return ResponseEntity.ok(project);
+        try {
+            User owner = getCurrentUser(req);
+            Project project = projectService.createProject(request, owner);
+            return ResponseEntity.ok(project);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
-    // GET /api/proj — список моих репозиториев
+    // GET /api/proj/my— список моих репозиториев
     @GetMapping("/my")
     public ResponseEntity<List<Project>> getMyProjects(HttpServletRequest req) {
         User user = getCurrentUser(req);
@@ -98,9 +101,9 @@ public class ProjectController {
 
             // Поиск родителя
             Commit parent = null;
-            if (parentHash != null && !parentHash.isEmpty()) {
+            try{
                 parent = commitService.getCommitByHash(parentHash);
-            }
+            } catch (Exception exception) {}
 
             // Сохранение
             Commit commit = commitService.saveCommit(repo, commitHash, message, file, parent);

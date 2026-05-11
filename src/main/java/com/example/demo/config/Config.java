@@ -3,6 +3,11 @@ package com.example.demo.config;
 import com.example.demo.utils.ProjectSaver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,6 +29,25 @@ public class Config {
              e.printStackTrace();
          }
          return s;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // Для REST API с JWT CSRF не нужен
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        // Публичные репо
+                        .anyRequest().permitAll() // Остальное требует токена
+                );
+        // Здесь позже добавим JWT фильтр
+        return http.build();
     }
 
 //    @Bean

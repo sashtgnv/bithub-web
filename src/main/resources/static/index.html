@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>BitHub — Вход</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container" style="max-width:400px;">
+    <h1 style="text-align:center; margin-bottom:20px;">BitHub</h1>
+    <div id="auth-box">
+        <form id="login-form">
+            <h2>Вход</h2>
+            <input type="text" id="l-user" placeholder="Логин" required>
+            <input type="password" id="l-pass" placeholder="Пароль" required>
+            <button type="submit">Войти</button>
+        </form>
+        <form id="reg-form" style="display:none;">
+            <h2>Регистрация</h2>
+            <input type="text" id="r-user" placeholder="Логин" required>
+            <input type="email" id="r-email" placeholder="Email" required>
+            <input type="password" id="r-pass" placeholder="Пароль" required>
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <p id="msg"></p>
+        <button id="toggle" style="background:transparent; color:#0066cc; padding:0; margin-top:10px;">Нет аккаунта? Регистрация</button>
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/index.js"></script>
+
+</body>
+</html>
