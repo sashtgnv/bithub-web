@@ -1,7 +1,7 @@
 
 requireAuth();
 console.log(123)
-document.getElementById('token-display').textContent = localStorage.getItem('jwt_token') || 'не найден';
+// document.getElementById('token-display').textContent = localStorage.getItem('jwt_token') || 'не найден';
 
 async function loadRepos() {
     try {

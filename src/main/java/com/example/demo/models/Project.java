@@ -21,13 +21,17 @@ public class Project {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_user_id")
     private User owner;
     @Column
     private Boolean isPublic = true;
     @Column
     private LocalDateTime createdAt;
+    @Column
+    private Long fileSize; // Размер архива в байтах
+//    @Column
+//    private String storagePath;
 
     @PrePersist
     void onCreate(){

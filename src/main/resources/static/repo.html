@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyVCS — Репозиторий</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <a href="public.html" class="back-link">← Назад к каталогу</a>
+        <nav>
+            <a href="dashboard.html">Мои проекты</a>
+            <button id="logout-btn">Выйти</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Блок информации о репозитории -->
+        <section id="repo-info" class="info-card">
+            <div class="loading">Загрузка информации...</div>
+        </section>
+
+        <!-- Блок истории коммитов -->
+        <section class="mt-20">
+            <h2>История коммитов</h2>
+            <div class="loading" id="commits-loading">Загрузка истории...</div>
+
+            <table id="commits-table" class="hidden">
+                <thead>
+                <tr>
+                    <th>Хеш</th>
+                    <th>Сообщение</th>
+                    <th>Автор</th>
+                    <th>Дата</th>
+                </tr>
+                </thead>
+                <tbody id="commits-body"></tbody>
+            </table>
+
+            <p id="commits-empty" class="meta hidden">Коммитов пока нет. Создайте первый через CLI-клиент.</p>
+        </section>
+    </main>
+</div>
+
+<!-- Подключаем скрипты в правильном порядке -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/repo.js"></script>
+</body>
+</html>

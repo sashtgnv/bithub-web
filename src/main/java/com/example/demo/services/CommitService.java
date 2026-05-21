@@ -19,45 +19,23 @@ import java.util.List;
 @AllArgsConstructor
 public class CommitService {
 
-    @Value("${storage.path:./data/repos}")
-    private String storagePath;
-
+    private final ProjectService projectService;
     private final CommitRepository commitRepository;
 
-    public Commit saveCommit(Project repository, String commitHash, String message,
-                             MultipartFile file, Commit parent) throws IOException {
-
-        // Создаем папку: {storagePath}/{repo_id}/
-        Path repoDir = Paths.get(storagePath, repository.getId().toString());
-        Files.createDirectories(repoDir);
-
-        // Уникальное имя файла: {commit_hash}.zip
-        String filename = commitHash + ".zip";
-        Path filePath = repoDir.resolve(filename);
-
-        // Сохраняем файл на диск
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//        file.transferTo(filePath);
+    public Commit saveCommit(Project project, String commitHash, String message,
+                             MultipartFile file) throws IOException {
 
         // Создаем запись в БД
+        projectService.saveFiles(project,file);
         Commit commit = new Commit();
         commit.setHash(commitHash);
         commit.setMessage(message);
-        commit.setProject(repository);
-        commit.setParent(parent);
-        commit.setFileSize(file.getSize());
-        commit.setStoragePath(filePath.toString()); // Абсолютный путь
+        commit.setProject(project);
+
+        project.setFileSize(file.getSize());
+        projectService.updateProject(project);
 
         return commitRepository.save(commit);
-    }
-
-    // Получение файла коммита для скачивания
-    public Path getCommitFile(Commit commit) {
-        Path path = Paths.get(commit.getStoragePath());
-        if (!Files.exists(path)) {
-            throw new RuntimeException("Commit file not found on server");
-        }
-        return path;
     }
 
     public List<Commit> getCommitHistory(Project repository) {

@@ -20,16 +20,9 @@ public class Commit {
     private String hash;
     @Column
     private String message;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
     private Project project;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Commit parent;
-    @Column
-    private Long fileSize; // Размер архива в байтах
-    @Column
-    private String storagePath; // Путь к файлу на диске сервера
     @Column
     private LocalDateTime createdAt;
 

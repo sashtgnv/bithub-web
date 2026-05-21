@@ -81,37 +81,28 @@ public class ProjectController {
     }
 
     // POST /api/proj/{id}/push — загрузка коммита (файла)
-    @PostMapping(value = "/{id}/push", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> push(@PathVariable Long id,
+    @PostMapping(value = "/{idProj}/push", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> push(@PathVariable Long idProj,
                                   @RequestParam("file") MultipartFile file,
                                   @RequestParam("message") String message,
                                   @RequestParam("hash") String commitHash,
-                                  @RequestParam(value = "parent", required = false) String parentHash,
                                   HttpServletRequest req) {
         try {
-
+            System.out.println("push " + idProj + ' '+ commitHash);
             User user = getCurrentUser(req);
-
-            Project repo = projectService.getProject(id, user);
+            Project repo = projectService.getProject(idProj, user);
 
             // Проверка прав
             if (!repo.getOwner().getId().equals(user.getId())) {
                 return ResponseEntity.status(403).body("Only owner can push");
             }
 
-            // Поиск родителя
-            Commit parent = null;
-            try{
-                parent = commitService.getCommitByHash(parentHash);
-            } catch (Exception exception) {}
-
             // Сохранение
-            Commit commit = commitService.saveCommit(repo, commitHash, message, file, parent);
+            Commit commit = commitService.saveCommit(repo, commitHash, message, file);
 
             return ResponseEntity.ok(commit);
-
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Push failed: " + e.getMessage());
         }
     }
@@ -129,8 +120,8 @@ public class ProjectController {
                         c.getHash(),
                         c.getMessage(),
                         c.getProject().getOwner().getUsername(),
-                        c.getCreatedAt(),
-                        c.getFileSize()
+                        c.getCreatedAt()
+//                        ,c.getFileSize()
                 ))
                 .collect(Collectors.toList());
 
@@ -138,8 +129,8 @@ public class ProjectController {
     }
 
     // GET /api/proj/{id}/clone/{hash} — скачать снапшот коммита
-    @GetMapping("/clone/{hash}")
-    public ResponseEntity<FileSystemResource> clone(@PathVariable String hash,
+    @GetMapping("/clone/{id}")
+    public ResponseEntity<FileSystemResource> clone(@PathVariable Long id,
                                                     HttpServletRequest req) {
         User user;
         try {
@@ -147,68 +138,21 @@ public class ProjectController {
         } catch (RuntimeException e) {
             user = new User(0L);
         }
-        Commit commit = commitService.getCommitByHash(hash);
-        Project proj = commit.getProject();
+        Project proj = projectService.getProject(id, user);
 
         // Проверка доступа: если репо приватное, только владелец
         if (!proj.getIsPublic() && !proj.getOwner().getId().equals(user.getId())) {
             throw new RuntimeException("Access denied");
         }
 
-        Path file = commitService.getCommitFile(commit);
+        Path file = projectService.getCommitFile(proj);
         FileSystemResource resource = new FileSystemResource(file);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + hash + ".zip\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + id + ".zip\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
 
-   /*
-
-
-    @PatchMapping(value = "/api/projects")
-    public ResponseEntity<?> updateProject(@ModelAttribute ProjectDto projectRequest) {
-        MultipartFile sourceFile = projectRequest.getFile();
-
-        try {
-            Project project = projectService.findProjectByNameAndOwnerUser(new User(projectRequest.getOwnerUserId()), projectRequest.getName());
-            String newPath = saver.update(project.getPath(), sourceFile.getInputStream(), sourceFile.getOriginalFilename());
-            project.setPath(newPath);
-            projectService.update(project);
-            return ResponseEntity.ok().build();
-        } catch (IOException e) {
-//            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
-        } catch (NullPointerException e) {
-//            e.printStackTrace();
-            return ResponseEntity.notFound().build();
-        }
-
-    }
-
-    @GetMapping("/api/projects")
-    public ResponseEntity<?> getProjectsByOwner(@ModelAttribute User owner) {
-        List<Project> project = projectService.findProjectsByOwner(owner);
-        return project != null ?
-                ResponseEntity.ok().body(project) : ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/api/projects/{id}")
-    public ResponseEntity<?> getProjectById(@PathVariable Long id) {
-        Project project = projectService.findProjectById(id);
-        return project != null ?
-                ResponseEntity.ok().body(project) : ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/api/projects/download")
-    public ResponseEntity<FileSystemResource> getProjectFileById(@RequestParam Long id) {
-        Project projectData = projectService.findProjectById(id);
-        if (projectData.getPath()==null) return ResponseEntity.notFound().build();
-        FileSystemResource file = new FileSystemResource(projectData.getPath());
-        ContentDisposition contentDisposition = ContentDisposition.attachment().filename(file.getFilename(), StandardCharsets.UTF_8).build();
-        return file.exists() ?
-                ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
-                        .body(new FileSystemResource(file.getPath())) : ResponseEntity.notFound().build();
-    }*/
+   /**/
 }

@@ -12,5 +12,5 @@ public class CommitResponse {
     private String message;
     private String author;
     private LocalDateTime createdAt;
-    private Long fileSize;
+
 }
