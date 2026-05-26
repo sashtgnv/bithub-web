@@ -24,6 +24,8 @@ public class User {
     private Boolean isEnabled;
     @Column
     private LocalDateTime createdAt;
+    @Column
+    private String aboutMe;
 
     @PrePersist
     protected void onCreate() {

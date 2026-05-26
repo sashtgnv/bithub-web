@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1 id="page-title">Профиль</h1>
+        <nav id="header-nav">
+            <a href="public.html">🌐 Каталог</a>
+            <a href="dashboard.html">👤 Мои проекты</a>
+            <a href="edit-profile.html" id="edit-btn" class="btn hidden">✏️ Редактировать</a>
+            <button id="logout-btn" class="hidden" onclick="logout()">Выйти</button>
+
+        </nav>
+    </header>
+
+    <main>
+        <section class="profile-header">
+            <section class="profile-header">
+                <div class="avatar-circle">👤</div>
+                <h2 id="username-display">Загрузка...</h2>
+                <p id="about-me-display" class="meta" style="max-width:500px; margin:10px auto 0; font-style:italic;"></p>
+            </section>
+        </section>
+
+        <section class="mt-20">
+            <h3>Репозитории пользователя</h3>
+            <div class="loading" id="repos-loading">Загрузка...</div>
+            <div id="user-repos" class="hidden"></div>
+        </section>
+    </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

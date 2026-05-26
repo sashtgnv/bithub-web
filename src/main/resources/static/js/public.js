@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     requireAuth();
+    initProfileLink();
+
 
     const listEl = document.getElementById('public-list');
     try {

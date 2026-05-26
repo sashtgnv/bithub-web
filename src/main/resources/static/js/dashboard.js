@@ -1,6 +1,7 @@
 
 requireAuth();
-console.log(123)
+initProfileLink();
+
 // document.getElementById('token-display').textContent = localStorage.getItem('jwt_token') || 'не найден';
 
 async function loadRepos() {

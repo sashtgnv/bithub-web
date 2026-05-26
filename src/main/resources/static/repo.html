@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyVCS — Репозиторий</title>
+    <title>Репозиторий</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -22,6 +22,11 @@
             <div class="loading">Загрузка информации...</div>
         </section>
 
+        <!-- Блок действий (показывается только владельцу) -->
+        <div id="owner-actions" class="hidden mt-20">
+            <button id="delete-repo-btn" class="btn-danger">🗑️ Удалить репозиторий</button>
+        </div>
+
         <!-- Блок истории коммитов -->
         <section class="mt-20">
             <h2>История коммитов</h2>
@@ -29,7 +34,7 @@
 
             <table id="commits-table" class="hidden">
                 <thead>
-                <tr>
+                <tr></tr>
                     <th>Хеш</th>
                     <th>Сообщение</th>
                     <th>Автор</th>
@@ -39,9 +44,23 @@
                 <tbody id="commits-body"></tbody>
             </table>
 
-            <p id="commits-empty" class="meta hidden">Коммитов пока нет. Создайте первый через CLI-клиент.</p>
+            <p id="commits-empty" class="meta hidden">Коммитов пока нет.</p>
         </section>
     </main>
+</div>
+
+<!-- Модальное окно подтверждения удаления -->
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <h3>Подтверждение удаления</h3>
+        <p>Вы уверены, что хотите удалить репозиторий <strong id="modal-repo-name"></strong>?</p>
+        <p class="meta">Все файлы и история коммитов будут безвозвратно удалены.</p>
+        <div id="modal-error" class="error hidden"></div>
+        <div class="modal-actions">
+            <button id="confirm-delete" class="btn-danger">Удалить</button>
+            <button id="cancel-delete">Отмена</button>
+        </div>
+    </div>
 </div>
 
 <!-- Подключаем скрипты в правильном порядке -->

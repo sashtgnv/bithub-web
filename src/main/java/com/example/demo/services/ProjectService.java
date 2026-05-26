@@ -92,6 +92,12 @@ public class ProjectService {
         }
     }
 
+    public boolean deleteProject(Long id, User user) {
+        Project project = getProject(id, user);
+        projectRepository.delete(project);
+        return true;
+    }
+
 //    public Project findProjectById(Long id) {
 //        return projectRepository.findProjectById(id);
 //    }

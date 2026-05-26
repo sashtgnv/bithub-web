@@ -6,6 +6,7 @@ import com.example.demo.dto.ProjectRequest;
 import com.example.demo.models.Commit;
 import com.example.demo.models.Project;
 import com.example.demo.models.User;
+import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.CommitService;
 import com.example.demo.services.ProjectService;
 import com.example.demo.services.UserService;
@@ -35,24 +36,12 @@ public class ProjectController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
-    // Вспомогательный метод: извлечь пользователя из токена
-    private User getCurrentUser(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-            if (jwtUtil.validateToken(token)) {
-                return userService.getUserFromToken(token);
-            }
-        }
-        throw new RuntimeException("Unauthorized");
-    }
-
     // POST /api/proj — создать репозиторий
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody ProjectRequest request,
                                           HttpServletRequest req) {
         try {
-            User owner = getCurrentUser(req);
+            User owner = userService.getCurrentUser(req);
             Project project = projectService.createProject(request, owner);
             return ResponseEntity.ok(project);
         } catch (Exception e) {
@@ -63,8 +52,29 @@ public class ProjectController {
     // GET /api/proj/my— список моих репозиториев
     @GetMapping("/my")
     public ResponseEntity<List<Project>> getMyProjects(HttpServletRequest req) {
-        User user = getCurrentUser(req);
+        User user = userService.getCurrentUser(req);
         return ResponseEntity.ok(projectService.getUserProjects(user));
+    }
+
+    @GetMapping("/{username}/projects")
+    public ResponseEntity<Object> getUserRepos(
+            @PathVariable String username,
+            HttpServletRequest req) {
+
+        try {
+            User requester = userService.getCurrentUser(req);
+            User targetUser = userService.findByUsername(username);
+            List<Project> repos = projectService.getUserProjects(targetUser);
+            repos = repos.stream()
+                    .filter(Project::getIsPublic)
+                    .toList();
+            return ResponseEntity.ok(repos);
+        } catch (RuntimeException e) {
+            System.err.println(e);
+            return ResponseEntity.status(400).body(e);
+        }
+
+
     }
 
     // GET /api/proj/public — публичные репозитории (каталог)
@@ -76,8 +86,15 @@ public class ProjectController {
     // GET /api/proj/{id} — информация о репозитории
     @GetMapping("/{id}")
     public ResponseEntity<Project> getRepo(@PathVariable Long id, HttpServletRequest req) {
-        User user = getCurrentUser(req);
+        User user = userService.getCurrentUser(req);
         return ResponseEntity.ok(projectService.getProject(id, user));
+    }
+
+    // DELETE /api/proj/{id} — информация о репозитории
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteRepo(@PathVariable Long id, HttpServletRequest req) {
+        User user = userService.getCurrentUser(req);
+        return ResponseEntity.ok(projectService.deleteProject(id, user));
     }
 
     // POST /api/proj/{id}/push — загрузка коммита (файла)
@@ -89,7 +106,7 @@ public class ProjectController {
                                   HttpServletRequest req) {
         try {
             System.out.println("push " + idProj + ' '+ commitHash);
-            User user = getCurrentUser(req);
+            User user = userService.getCurrentUser(req);
             Project repo = projectService.getProject(idProj, user);
 
             // Проверка прав
@@ -111,7 +128,7 @@ public class ProjectController {
     @GetMapping("/{id}/commits")
     public ResponseEntity<List<CommitResponse>> getCommits(@PathVariable Long id,
                                                            HttpServletRequest req) {
-        User user = getCurrentUser(req);
+        User user = userService.getCurrentUser(req);
         Project proj = projectService.getProject(id, user);
 
         List<Commit> commits = commitService.getCommitHistory(proj);
@@ -134,7 +151,7 @@ public class ProjectController {
                                                     HttpServletRequest req) {
         User user;
         try {
-            user = getCurrentUser(req);
+            user = userService.getCurrentUser(req);
         } catch (RuntimeException e) {
             user = new User(0L);
         }
