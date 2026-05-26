@@ -2,42 +2,90 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя - VCS Center</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1 id="page-title">Профиль</h1>
-        <nav id="header-nav">
-            <a href="public.html">🌐 Каталог</a>
-            <a href="dashboard.html">👤 Мои проекты</a>
-            <a href="edit-profile.html" id="edit-btn" class="btn hidden">✏️ Редактировать</a>
-            <button id="logout-btn" class="hidden" onclick="logout()">Выйти</button>
+<nav class="navbar">
+    <div class="container nav-container">
+        <a href="/" class="logo">
+            <i class="fas fa-code-branch"></i>
+            <span>VCS Center</span>
+        </a>
+        <div class="nav-links">
+            <a href="/dashboard"><i class="fas fa-th-large"></i> Дашборд</a>
+            <a href="/public"><i class="fas fa-globe"></i> Обзор</a>
+            <a href="/profile" class="active"><i class="fas fa-user"></i> Профиль</a>
+            <button id="logoutBtn" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+        </div>
+    </div>
+</nav>
 
-        </nav>
-    </header>
+<main class="container main-content">
+    <div class="profile-header">
+        <div class="avatar-large">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="profile-info">
+            <h1 id="userName">Загрузка...</h1>
+            <p class="username-handle" id="userLogin">@...</p>
+            <p class="profile-bio" id="userBio"></p>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="repoCount">0</span>
+                    <span class="stat-label">Репозиториев</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="publicCount">0</span>
+                    <span class="stat-label">Публичных</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="privateCount">0</span>
+                    <span class="stat-label">Приватных</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <main>
-        <section class="profile-header">
-            <section class="profile-header">
-                <div class="avatar-circle">👤</div>
-                <h2 id="username-display">Загрузка...</h2>
-                <p id="about-me-display" class="meta" style="max-width:500px; margin:10px auto 0; font-style:italic;"></p>
-            </section>
-        </section>
+    <div class="profile-actions">
+        <a href="/edit-profile" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Редактировать профиль
+        </a>
+        <a href="/create-repo" class="btn btn-secondary">
+            <i class="fas fa-plus"></i> Новый репозиторий
+        </a>
+    </div>
 
-        <section class="mt-20">
-            <h3>Репозитории пользователя</h3>
-            <div class="loading" id="repos-loading">Загрузка...</div>
-            <div id="user-repos" class="hidden"></div>
-        </section>
-    </main>
-</div>
+    <section class="content-section">
+        <h2><i class="fas fa-history"></i> Последние активности</h2>
+        <div id="activityList" class="activity-list">
+            <div class="loading-state">
+                <i class="fas fa-spinner fa-spin"></i> Загрузка активности...
+            </div>
+        </div>
+    </section>
 
-<script src="js/api.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/profile.js"></script>
+    <section class="content-section">
+        <h2><i class="fas fa-box"></i> Мои репозитории</h2>
+        <div id="userRepos" class="repos-grid">
+            <div class="loading-state">
+                <i class="fas fa-spinner fa-spin"></i> Загрузка репозиториев...
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2023 VCS Center. Все права защищены.</p>
+    </div>
+</footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/profile.js"></script>
 </body>
 </html>

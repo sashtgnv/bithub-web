@@ -2,28 +2,76 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>BitHub — Вход</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitHub — Добро пожаловать</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<div class="container" style="max-width:400px;">
-    <h1 style="text-align:center; margin-bottom:20px;">BitHub</h1>
-    <div id="auth-box">
-        <form id="login-form">
-            <h2>Вход</h2>
-            <input type="text" id="l-user" placeholder="Логин" required>
-            <input type="password" id="l-pass" placeholder="Пароль" required>
-            <button type="submit">Войти</button>
-        </form>
-        <form id="reg-form" style="display:none;">
-            <h2>Регистрация</h2>
-            <input type="text" id="r-user" placeholder="Логин" required>
-            <input type="email" id="r-email" placeholder="Email" required>
-            <input type="password" id="r-pass" placeholder="Пароль" required>
-            <button type="submit">Зарегистрироваться</button>
-        </form>
-        <p id="msg"></p>
-        <button id="toggle" style="background:transparent; color:#0066cc; padding:0; margin-top:10px;">Нет аккаунта? Регистрация</button>
+<body class="auth-page">
+
+<div class="auth-container">
+    <div class="auth-info">
+        <h1><i class="fas fa-code-branch"></i> BitHub</h1>
+        <p>Ваша персональная платформа для управления версиями кода. Храните, делитесь и сотрудничайте над проектами с легкостью.</p>
+        <ul class="features">
+            <li><i class="fas fa-check-circle"></i> Безопасное хранение кода</li>
+            <li><i class="fas fa-check-circle"></i> Удобное управление репозиториями</li>
+            <li><i class="fas fa-check-circle"></i> Публичные и приватные проекты</li>
+            <li><i class="fas fa-check-circle"></i> Интуитивный интерфейс</li>
+        </ul>
+    </div>
+
+    <div class="auth-forms">
+        <div class="auth-logo">
+            <i class="fas fa-cube"></i>
+            <h2>BitHub</h2>
+        </div>
+
+        <div class="form-container">
+            <div id="login-form" class="form-section">
+                <h3>Вход в аккаунт</h3>
+                <form>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="l-user" placeholder="Логин" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="l-pass" placeholder="Пароль" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Войти</button>
+                </form>
+                <p class="toggle-text">
+                    Нет аккаунта?
+                    <button id="toggle-to-reg" class="toggle-btn">Зарегистрироваться</button>
+                </p>
+            </div>
+
+            <div id="reg-form" class="form-section hidden">
+                <h3>Регистрация</h3>
+                <form>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="r-user" placeholder="Логин" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="r-email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="r-pass" placeholder="Пароль" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Зарегистрироваться</button>
+                </form>
+                <p class="toggle-text">
+                    Уже есть аккаунт?
+                    <button id="toggle-to-login" class="toggle-btn">Войти</button>
+                </p>
+            </div>
+
+            <p id="msg"></p>
+        </div>
     </div>
 </div>
 

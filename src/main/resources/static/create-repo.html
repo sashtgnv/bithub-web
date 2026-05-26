@@ -2,35 +2,93 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Создание репозитория</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<div class="container narrow">
-    <header>
-        <a href="dashboard.html" class="back-link">← Назад к моим проектам</a>
+<body class="create-repo-page">
+<div class="create-container">
+    <header class="create-header">
+        <a href="dashboard.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Назад к моим проектам
+        </a>
+        <nav>
+            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Профиль</a>
+        </nav>
     </header>
 
     <main>
-        <h1>Новый репозиторий</h1>
-        <form id="create-repo-form" class="form-card">
-            <label for="repo-name">Название</label>
-            <input type="text" id="repo-name" name="name" placeholder="my-awesome-project" required>
-
-            <label for="repo-desc">Описание</label>
-            <textarea id="repo-desc" name="description" placeholder="Кратко о проекте (необязательно)"></textarea>
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="repo-public" name="isPublic" checked>
-                <span>Публичный репозиторий</span>
-            </label>
-
-            <div id="form-error" class="error hidden"></div>
-
-            <div class="form-actions">
-                <button type="submit" id="submit-btn">Создать репозиторий</button>
+        <div class="create-card">
+            <div class="create-header-section">
+                <i class="fas fa-folder-plus create-icon"></i>
+                <h1>Новый репозиторий</h1>
+                <p class="subtitle">Заполните информацию для создания репозитория</p>
             </div>
-        </form>
+
+            <form id="create-repo-form" class="create-form">
+                <div class="form-group">
+                    <label for="repo-name">
+                        <i class="fas fa-tag"></i> Название репозитория
+                    </label>
+                    <input
+                            type="text"
+                            id="repo-name"
+                            name="name"
+                            placeholder="my-awesome-project"
+                            required
+                            autocomplete="off"
+                    >
+                    <span class="help-text">Используйте латинские буквы, цифры и дефисы</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="repo-desc">
+                        <i class="fas fa-align-left"></i> Описание
+                    </label>
+                    <textarea
+                            id="repo-desc"
+                            name="description"
+                            placeholder="Кратко опишите ваш проект..."
+                            rows="3"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="visibility-toggle">
+                        <input type="checkbox" id="repo-public" name="isPublic" checked>
+                        <span class="toggle-slider"></span>
+                        <div class="toggle-info">
+                            <strong>Публичный репозиторий</strong>
+                            <span class="help-text-inline">Доступен всем пользователям</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div id="form-error" class="error hidden"></div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submit-btn" class="btn-primary btn-lg">
+                        <i class="fas fa-plus-circle"></i> Создать репозиторий
+                    </button>
+                    <a href="dashboard.html" class="btn-secondary">
+                        <i class="fas fa-times"></i> Отмена
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="info-sidebar">
+            <div class="info-card small">
+                <h3><i class="fas fa-lightbulb"></i> Советы</h3>
+                <ul class="tips-list">
+                    <li>Выберите понятное и запоминающееся имя</li>
+                    <li>Добавьте описание для лучшего понимания проекта</li>
+                    <li>Публичные репозитории помогают найти collaborators</li>
+                    <li>Вы всегда можете изменить настройки позже</li>
+                </ul>
+            </div>
+        </div>
     </main>
 </div>
 

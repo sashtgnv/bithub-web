@@ -4,61 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Репозиторий</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<div class="container">
-    <header>
-        <a href="public.html" class="back-link">← Назад к каталогу</a>
-        <nav>
-            <a href="dashboard.html">Мои проекты</a>
-            <button id="logout-btn">Выйти</button>
-        </nav>
+<body class="repo-page">
+<div class="repo-container">
+    <header class="repo-header">
+        <div class="header-left">
+            <a href="public.html" class="back-link"><i class="fas fa-arrow-left"></i> Каталог</a>
+            <nav class="breadcrumb">
+                <a href="dashboard.html"><i class="fas fa-folder"></i> Мои проекты</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Профиль</a>
+            <button id="logout-btn" class="btn-danger"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+        </div>
     </header>
 
     <main>
         <!-- Блок информации о репозитории -->
-        <section id="repo-info" class="info-card">
-            <div class="loading">Загрузка информации...</div>
+        <section id="repo-info" class="info-card repo-info-card">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Загрузка информации...</div>
         </section>
 
         <!-- Блок действий (показывается только владельцу) -->
-        <div id="owner-actions" class="hidden mt-20">
-            <button id="delete-repo-btn" class="btn-danger">🗑️ Удалить репозиторий</button>
+        <div id="owner-actions" class="owner-actions hidden">
+            <button id="delete-repo-btn" class="btn-danger btn-lg"><i class="fas fa-trash"></i> Удалить репозиторий</button>
         </div>
 
-        <!-- Блок истории коммитов -->
-        <section class="mt-20">
-            <h2>История коммитов</h2>
-            <div class="loading" id="commits-loading">Загрузка истории...</div>
+        <!-- Навигация по разделам репозитория -->
+        <div class="repo-nav">
+            <button class="repo-nav-btn active" data-tab="commits"><i class="fas fa-code-branch"></i> Коммиты</button>
+<!--            <button class="repo-nav-btn" data-tab="files"><i class="fas fa-folder-open"></i> Файлы</button>-->
+<!--            <button class="repo-nav-btn" data-tab="about"><i class="fas fa-info-circle"></i> О проекте</button>-->
+        </div>
 
-            <table id="commits-table" class="hidden">
-                <thead>
-                <tr></tr>
-                    <th>Хеш</th>
-                    <th>Сообщение</th>
-                    <th>Автор</th>
-                    <th>Дата</th>
-                </tr>
-                </thead>
-                <tbody id="commits-body"></tbody>
-            </table>
+        <!-- Секция коммитов -->
+        <section id="commits-section" class="repo-section active">
+            <div class="section-header">
+                <h2><i class="fas fa-history"></i> История коммитов</h2>
+            </div>
 
-            <p id="commits-empty" class="meta hidden">Коммитов пока нет.</p>
+            <div class="loading-state" id="commits-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Загрузка истории коммитов...</p>
+            </div>
+
+            <div class="commits-table-wrapper hidden" id="commits-wrapper">
+                <table class="commits-table">
+                    <thead>
+                    <tr>
+                        <th><i class="fas fa-fingerprint"></i> Хеш</th>
+                        <th><i class="fas fa-comment"></i> Сообщение</th>
+                        <th><i class="fas fa-user"></i> Автор</th>
+                        <th><i class="fas fa-clock"></i> Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody id="commits-body"></tbody>
+                </table>
+            </div>
+
+            <div class="empty-state hidden" id="commits-empty">
+                <i class="fas fa-inbox"></i>
+                <h3>Коммитов пока нет</h3>
+                <p>Как только появятся коммиты, они отобразятся здесь.</p>
+            </div>
+
+            <div class="error-state hidden" id="commits-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Ошибка загрузки</h3>
+                <p id="commits-error-msg"></p>
+            </div>
         </section>
+
+<!--        &lt;!&ndash; Секция файлов (заглушка) &ndash;&gt;-->
+<!--        <section id="files-section" class="repo-section hidden">-->
+<!--            <div class="section-header">-->
+<!--                <h2><i class="fas fa-folder-open"></i> Файлы проекта</h2>-->
+<!--            </div>-->
+<!--            <div class="empty-state">-->
+<!--                <i class="fas fa-folder-open"></i>-->
+<!--                <h3>Просмотр файлов</h3>-->
+<!--                <p>Функционал просмотра файлов будет добавлен в ближайшее время.</p>-->
+<!--            </div>-->
+<!--        </section>-->
+
+<!--        &lt;!&ndash; Секция о проекте (заглушка) &ndash;&gt;-->
+<!--        <section id="about-section" class="repo-section hidden">-->
+<!--            <div class="section-header">-->
+<!--                <h2><i class="fas fa-info-circle"></i> О проекте</h2>-->
+<!--            </div>-->
+<!--            <div class="info-card">-->
+<!--                <div id="about-content">-->
+<!--                    <p>Подробная информация о проекте будет доступна здесь.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
     </main>
 </div>
 
 <!-- Модальное окно подтверждения удаления -->
-<div id="delete-modal" class="modal">
+<div id="delete-modal" class="modal hidden">
     <div class="modal-content">
-        <h3>Подтверждение удаления</h3>
-        <p>Вы уверены, что хотите удалить репозиторий <strong id="modal-repo-name"></strong>?</p>
-        <p class="meta">Все файлы и история коммитов будут безвозвратно удалены.</p>
+        <div class="modal-header">
+            <i class="fas fa-exclamation-triangle modal-icon"></i>
+            <h3>Подтверждение удаления</h3>
+        </div>
+        <div class="modal-body">
+            <p>Вы уверены, что хотите удалить репозиторий <strong id="modal-repo-name"></strong>?</p>
+            <p class="warning-text"><i class="fas fa-triangle-exclamation"></i> Все файлы и история коммитов будут безвозвратно удалены.</p>
+        </div>
         <div id="modal-error" class="error hidden"></div>
         <div class="modal-actions">
-            <button id="confirm-delete" class="btn-danger">Удалить</button>
-            <button id="cancel-delete">Отмена</button>
+            <button id="cancel-delete" class="btn-secondary"><i class="fas fa-times"></i> Отмена</button>
+            <button id="confirm-delete" class="btn-danger"><i class="fas fa-trash"></i> Удалить</button>
         </div>
     </div>
 </div>

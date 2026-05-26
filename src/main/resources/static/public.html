@@ -2,25 +2,78 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Публичные проекты</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<div class="container">
-    <header>
-        <h1>Публичные проекты</h1>
-        <nav>
-            <a href="dashboard.html">Мои проекты</a>
-            <button onclick="logout()">Выйти</button>
+<body class="public-page">
+<div class="public-container">
+    <header class="public-header">
+        <div class="header-left">
+            <div class="logo-section">
+                <i class="fas fa-code-branch logo-icon"></i>
+                <h1><span class="gradient-text">Публичные проекты</span></h1>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-folder"></i> Мои проекты</a>
+            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Профиль</a>
+            <button onclick="logout()" class="btn-danger"><i class="fas fa-sign-out-alt"></i> Выйти</button>
         </nav>
     </header>
-    <div id="public-list" class="repo-list">Загрузка...</div>
+
+    <main>
+        <section class="public-intro">
+            <p class="intro-text">
+                <i class="fas fa-globe"></i>
+                Открытые репозитории сообщества. Изучайте код, делитесь идеями и сотрудничайте!
+            </p>
+        </section>
+
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Поиск репозиториев...">
+            </div>
+        </div>
+
+        <section class="repos-section">
+            <div class="loading-state" id="public-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Загрузка публичных проектов...</p>
+            </div>
+
+            <div class="empty-state hidden" id="public-empty">
+                <i class="fas fa-inbox"></i>
+                <h3>Публичных проектов пока нет</h3>
+                <p>Будьте первым, кто создаст публичный репозиторий!</p>
+                <a href="create-repo.html" class="btn-primary btn-lg">
+                    <i class="fas fa-plus"></i> Создать репозиторий
+                </a>
+            </div>
+
+            <div class="error-state hidden" id="public-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Ошибка загрузки</h3>
+                <p id="public-error-msg"></p>
+                <button onclick="location.reload()" class="btn-secondary">
+                    <i class="fas fa-redo"></i> Попробовать снова
+                </button>
+            </div>
+
+            <div class="repo-grid" id="public-list"></div>
+        </section>
+    </main>
+
+    <footer class="public-footer">
+        <p>&copy; 2024 VCS Platform. Все права защищены.</p>
+    </footer>
 </div>
 
 <script src="js/api.js"></script>
 <script src="js/auth.js"></script>
-<script src="js/public.js"></script>
 <script src="js/utils.js"></script>
-
+<script src="js/public.js"></script>
 </body>
 </html>

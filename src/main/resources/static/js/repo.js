@@ -7,15 +7,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const repoId = params.get('id');
     if (!repoId) {
-        document.getElementById('repo-info').innerHTML = `<p class="error">ID репозитория не указан.</p>`;
+        document.getElementById('repo-info').innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>ID репозитория не указан</h3>
+                <p>Пожалуйста, выберите репозиторий из каталога.</p>
+            </div>`;
         return;
     }
 
     const infoEl = document.getElementById('repo-info');
     const loadingCommits = document.getElementById('commits-loading');
-    const tableEl = document.getElementById('commits-table');
+    const commitsWrapper = document.getElementById('commits-wrapper');
     const tbodyEl = document.getElementById('commits-body');
     const emptyEl = document.getElementById('commits-empty');
+    const errorEl = document.getElementById('commits-error');
+    const errorMsg = document.getElementById('commits-error-msg');
     const ownerActions = document.getElementById('owner-actions');
 
     // Элементы модалки
@@ -26,17 +33,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     const deleteBtn = document.getElementById('delete-repo-btn');
     const modalError = document.getElementById('modal-error');
 
-    // emptyEl.classList.remove('hidden');
-    // loadingCommits.classList.remove('hidden');
+    // Навигация по табам
+    const navBtns = document.querySelectorAll('.repo-nav-btn');
+    const sections = document.querySelectorAll('.repo-section');
 
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+
+            // Убираем активный класс у всех кнопок и секций
+            navBtns.forEach(b => b.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+
+            // Добавляем активный класс текущей кнопке и секции
+            btn.classList.add('active');
+            document.getElementById(`${tab}-section`).classList.add('active');
+        });
+    });
 
     // 1. Привязываем обработчики СРАЗУ, до запроса к API
     deleteBtn.addEventListener('click', () => {
-        modal.classList.add('show');
+        modal.classList.remove('hidden');
         modalError.classList.add('hidden');
     });
 
-    const closeModal = () => modal.classList.remove('show');
+    const closeModal = () => modal.classList.add('hidden');
     cancelBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
@@ -44,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     confirmBtn.addEventListener('click', async () => {
         confirmBtn.disabled = true;
-        confirmBtn.textContent = 'Удаление...';
+        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Удаление...';
         modalError.classList.add('hidden');
 
         try {
@@ -55,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             modalError.classList.remove('hidden');
         } finally {
             confirmBtn.disabled = false;
-            confirmBtn.textContent = 'Удалить';
+            confirmBtn.innerHTML = '<i class="fas fa-trash"></i> Удалить';
         }
     });
 
@@ -63,18 +84,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const repo = await apiFetch(`/proj/${repoId}`);
 
+        const visibilityBadge = repo.isPublic
+            ? '<span class="badge badge-public"><i class="fas fa-globe"></i> Публичный</span>'
+            : '<span class="badge badge-private"><i class="fas fa-lock"></i> Приватный</span>';
+
         infoEl.innerHTML = `
-            <h2>${Utils.escapeHtml(repo.name)}</h2>
-            <div class="meta-row">
-                <p class="badge">${repo.isPublic ? '🌐 Публичный' : '🔒 Приватный'}</p>
-                <a href="profile.html?username=${Utils.escapeHtml(repo.owner?.username || '')}">
-                    Владелец: ${Utils.escapeHtml(repo.owner?.username || '—')}
-                </a>
-                <p>Создан: ${Utils.formatDate(repo.createdAt)}</p>
+            <div class="repo-header-info">
+                <div class="repo-title-row">
+                    <i class="fas fa-folder repo-icon"></i>
+                    <h2>${Utils.escapeHtml(repo.name)}</h2>
+                </div>
+                <div class="repo-meta-row">
+                    ${visibilityBadge}
+                    <a href="profile.html?username=${Utils.escapeHtml(repo.owner?.username || '')}" class="owner-link">
+                        <i class="fas fa-user"></i> ${Utils.escapeHtml(repo.owner?.username || '—')}
+                    </a>
+                    <span class="meta-item"><i class="fas fa-calendar"></i> ${Utils.formatDate(repo.createdAt)}</span>
+                </div>
+                ${repo.description ? `<p class="description">${Utils.escapeHtml(repo.description)}</p>` : ''}
             </div>
-            <p class="description">${Utils.escapeHtml(repo.description || 'Без описания')}</p>
             <div class="cli-box">
-                <strong>Команда для CLI:</strong>
+                <div class="cli-header">
+                    <strong><i class="fas fa-terminal"></i> Команда для клонирования:</strong>
+                    <button class="btn-copy" onclick="navigator.clipboard.writeText('clone /api/proj/${repo.id}')">
+                        <i class="fas fa-copy"></i> Копировать
+                    </button>
+                </div>
                 <code>clone /api/proj/${repo.id}</code>
             </div>
         `;
@@ -83,15 +118,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         const currentUserId = localStorage.getItem('user_id');
         if (currentUserId && repo.owner?.id && String(currentUserId) === String(repo.owner.id)) {
             ownerActions.classList.remove('hidden');
-            modalRepoName.textContent = repo.name; // Заранее подставляем имя
+            modalRepoName.textContent = repo.name;
+
+            // Копируем описание в секцию "О проекте"
+            const aboutContent = document.getElementById('about-content');
+            if (repo.description) {
+                aboutContent.innerHTML = `<p>${Utils.escapeHtml(repo.description)}</p>`;
+            } else {
+                aboutContent.innerHTML = '<p class="meta">Описание отсутствует.</p>';
+            }
         }
 
     } catch (err) {
-        infoEl.innerHTML = `<p class="error">Ошибка загрузки: ${err.message}</p>`;
+        infoEl.innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Ошибка загрузки</h3>
+                <p>Не удалось загрузить информацию о репозитории: ${err.message}</p>
+            </div>`;
         console.error('Repo load error:', err);
     }
 
-    // 3. Загружаем историю коммитов (параллельно или последовательно)
+    // 3. Загружаем историю коммитов
     try {
         const commits = await apiFetch(`/proj/${repoId}/commits`);
         loadingCommits.classList.add('hidden');
@@ -99,18 +147,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!commits || commits.length === 0) {
             emptyEl.classList.remove('hidden');
         } else {
-            tableEl.classList.remove('hidden');
+            commitsWrapper.classList.remove('hidden');
             tbodyEl.innerHTML = commits.map(c => `
                 <tr>
-                    <td><code title="${Utils.escapeHtml(c.hash)}">${Utils.escapeHtml(c.hash.substring(0, 8))}</code></td>
-                    <td>${Utils.escapeHtml(c.message)}</td>
-                    <td>${Utils.escapeHtml(c.author)}</td>
-                    <td>${Utils.formatDate(c.createdAt)}</td>
+                    <td><code class="commit-hash" title="${Utils.escapeHtml(c.hash)}">${Utils.escapeHtml(c.hash.substring(0, 8))}</code></td>
+                    <td class="commit-message">${Utils.escapeHtml(c.message)}</td>
+                    <td class="commit-author"><i class="fas fa-user-circle"></i> ${Utils.escapeHtml(c.author)}</td>
+                    <td class="commit-date"><i class="far fa-clock"></i> ${Utils.formatDate(c.createdAt)}</td>
                 </tr>
             `).join('');
         }
     } catch (err) {
         loadingCommits.classList.add('hidden');
-        tableEl.innerHTML = `<tr><td colspan="4" class="error">Не удалось загрузить историю</td></tr>`;
+        errorEl.classList.remove('hidden');
+        errorMsg.textContent = `Не удалось загрузить историю коммитов: ${err.message}`;
     }
 });

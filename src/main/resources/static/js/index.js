@@ -1,20 +1,19 @@
-// Переключение форм
-document.getElementById('toggle').onclick = () => {
-    const login = document.getElementById('login-form');
-    const reg = document.getElementById('reg-form');
-    const btn = document.getElementById('toggle');
-    if (login.style.display !== 'none') {
-        login.style.display = 'none';
-        reg.style.display = 'block';
-        btn.textContent = 'Уже есть аккаунт? Войти';
-    } else {
-        login.style.display = 'block';
-        reg.style.display = 'none';
-        btn.textContent = 'Нет аккаунта? Регистрация';
-    }
-};
+// Переключение между формами входа и регистрации
+document.getElementById('toggle-to-reg').addEventListener('click', function() {
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('reg-form').classList.remove('hidden');
+    document.getElementById('msg').textContent = '';
+    document.getElementById('msg').className = '';
+});
 
-// // Обработка входа
+document.getElementById('toggle-to-login').addEventListener('click', function() {
+    document.getElementById('reg-form').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+    document.getElementById('msg').textContent = '';
+    document.getElementById('msg').className = '';
+});
+
+// Обработка входа
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     try {
