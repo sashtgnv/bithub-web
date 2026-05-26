@@ -3,89 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактирование профиля - VCS Center</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Редактирование профиля</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-repo-styles.css">
+    <link rel="stylesheet" href="css/dashboard-styles.css">
+    <link rel="stylesheet" href="css/index-styles.css">
+    <link rel="stylesheet" href="css/public-styles.css">
+    <link rel="stylesheet" href="css/repo-styles.css">
 </head>
-<body>
-<nav class="navbar">
-    <div class="container nav-container">
-        <a href="/" class="logo">
-            <i class="fas fa-code-branch"></i>
-            <span>VCS Center</span>
-        </a>
-        <div class="nav-links">
-            <a href="/dashboard"><i class="fas fa-th-large"></i> Дашборд</a>
-            <a href="/public"><i class="fas fa-globe"></i> Обзор</a>
-            <a href="/profile"><i class="fas fa-user"></i> Профиль</a>
+<body class="edit-profile-page">
+<div class="edit-container">
+    <header class="edit-header">
+        <div class="header-left">
+            <i class="fas fa-code-branch logo-icon"></i>
+            <h1>Редактирование профиля</h1>
         </div>
-    </div>
-</nav>
-
-<main class="container main-content">
-    <div class="form-wrapper">
-        <div class="form-header">
-            <a href="/profile" class="back-link">
-                <i class="fas fa-arrow-left"></i> Назад в профиль
+        <nav class="header-nav">
+            <a href="dashboard.html" class="nav-link">
+                <i class="fas fa-folder"></i> Мои проекты
             </a>
-            <h1><i class="fas fa-user-edit"></i> Редактирование профиля</h1>
+            <a href="public.html" class="nav-link">
+                <i class="fas fa-globe"></i> Публичные проекты
+            </a>
+            <a href="profile.html" class="nav-link">
+                <i class="fas fa-user"></i> Профиль
+            </a>
+        </nav>
+    </header>
+
+    <main class="edit-content">
+        <div class="edit-card">
+            <div class="form-header-section">
+                <i class="fas fa-user-edit edit-icon"></i>
+                <h2>Изменение данных профиля</h2>
+                <p class="subtitle">Обновите информацию о себе</p>
+            </div>
+
+            <form id="profileForm" class="edit-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> Логин
+                    </label>
+                    <input type="text" id="username" readonly disabled class="form-input-disabled">
+                    <span class="help-text">Логин нельзя изменить</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" id="email" readonly disabled class="form-input-disabled">
+                    <span class="help-text">Email нельзя изменить</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">
+                        <i class="fas fa-id-card"></i> Полное имя
+                    </label>
+                    <input type="text" id="fullName" placeholder="Иван Иванов" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">
+                        <i class="fas fa-comment-alt"></i> О себе
+                    </label>
+                    <textarea id="bio" placeholder="Расскажите немного о себе..." rows="4" class="form-input"></textarea>
+                    <span class="help-text">Краткая информация для вашего профиля</span>
+                </div>
+
+                <div id="formMessage" class="form-message hidden"></div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">
+                        <i class="fas fa-save"></i> Сохранить изменения
+                    </button>
+                    <a href="profile.html" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Отмена
+                    </a>
+                </div>
+            </form>
         </div>
 
-        <form id="profileForm" class="modern-form">
-            <div class="form-group">
-                <label for="username">
-                    <i class="fas fa-user"></i> Логин
-                </label>
-                <input type="text" id="username" readonly disabled class="form-input-disabled">
-                <span class="form-hint">Логин нельзя изменить</span>
+        <div class="info-sidebar">
+            <div class="info-card small">
+                <h3><i class="fas fa-lightbulb"></i> Советы</h3>
+                <ul class="tips-list">
+                    <li>Добавьте полное имя для лучшего представления</li>
+                    <li>Расскажите о своих навыках и интересах</li>
+                    <li>Информация видна другим пользователям</li>
+                    <li>Вы можете изменить данные в любое время</li>
+                </ul>
             </div>
+        </div>
+    </main>
 
-            <div class="form-group">
-                <label for="email">
-                    <i class="fas fa-envelope"></i> Email
-                </label>
-                <input type="email" id="email" readonly disabled class="form-input-disabled">
-                <span class="form-hint">Email нельзя изменить</span>
-            </div>
+    <footer class="edit-footer">
+        <p>&copy; 2024 VCS Platform. Все права защищены.</p>
+    </footer>
+</div>
 
-            <div class="form-group">
-                <label for="fullName">
-                    <i class="fas fa-id-card"></i> Полное имя
-                </label>
-                <input type="text" id="fullName" placeholder="Иван Иванов" class="form-input">
-            </div>
-
-            <div class="form-group">
-                <label for="bio">
-                    <i class="fas fa-comment-alt"></i> О себе
-                </label>
-                <textarea id="bio" placeholder="Расскажите немного о себе..." rows="4" class="form-input"></textarea>
-                <span class="form-hint">Краткая информация для вашего профиля</span>
-            </div>
-
-            <div id="formMessage" class="form-message hidden"></div>
-
-            <div class="form-actions">
-                <button type="submit" id="submitBtn" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Сохранить изменения
-                </button>
-                <a href="/profile" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Отмена
-                </a>
-            </div>
-        </form>
-    </div>
-</main>
-
-<footer class="footer">
-    <div class="container">
-        <p>&copy; 2023 VCS Center. Все права защищены.</p>
-    </div>
-</footer>
-
-<script src="/js/api.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/utils.js"></script>
-<script src="/js/edit-profile.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/edit-profile.js"></script>
 </body>
 </html>

@@ -33,23 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const deleteBtn = document.getElementById('delete-repo-btn');
     const modalError = document.getElementById('modal-error');
 
-    // Навигация по табам
-    const navBtns = document.querySelectorAll('.repo-nav-btn');
-    const sections = document.querySelectorAll('.repo-section');
-
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tab = btn.dataset.tab;
-
-            // Убираем активный класс у всех кнопок и секций
-            navBtns.forEach(b => b.classList.remove('active'));
-            sections.forEach(s => s.classList.remove('active'));
-
-            // Добавляем активный класс текущей кнопке и секции
-            btn.classList.add('active');
-            document.getElementById(`${tab}-section`).classList.add('active');
-        });
-    });
 
     // 1. Привязываем обработчики СРАЗУ, до запроса к API
     deleteBtn.addEventListener('click', () => {

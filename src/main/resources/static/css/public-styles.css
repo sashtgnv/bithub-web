@@ -1,0 +1,100 @@
+
+/* ================================ */
+/* Стили для страницы public.html   */
+/* ================================ */
+
+.public-page {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.public-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.public-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+}
+
+.public-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-section .logo-icon {
+    font-size: 2.5em;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.logo-section h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.public-intro {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.intro-text {
+    margin: 0;
+    color: #555;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.intro-text i {
+    color: #667eea;
+    font-size: 1.3em;
+}
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+.repos-section {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.public-footer {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-size: 0.9em;
+}

@@ -6,6 +6,11 @@
     <title>Репозиторий</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-repo-styles.css">
+    <link rel="stylesheet" href="css/dashboard-styles.css">
+    <link rel="stylesheet" href="css/index-styles.css">
+    <link rel="stylesheet" href="css/public-styles.css">
+    <link rel="stylesheet" href="css/repo-styles.css">
 </head>
 <body class="repo-page">
 <div class="repo-container">
@@ -17,7 +22,7 @@
             </nav>
         </div>
         <div class="header-right">
-            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Профиль</a>
+            <a href="profile.html" id="profile-link" class="nav-link"><i class="fas fa-user"></i> Профиль</a>
             <button id="logout-btn" class="btn-danger"><i class="fas fa-sign-out-alt"></i> Выйти</button>
         </div>
     </header>
@@ -34,11 +39,6 @@
         </div>
 
         <!-- Навигация по разделам репозитория -->
-        <div class="repo-nav">
-            <button class="repo-nav-btn active" data-tab="commits"><i class="fas fa-code-branch"></i> Коммиты</button>
-<!--            <button class="repo-nav-btn" data-tab="files"><i class="fas fa-folder-open"></i> Файлы</button>-->
-<!--            <button class="repo-nav-btn" data-tab="about"><i class="fas fa-info-circle"></i> О проекте</button>-->
-        </div>
 
         <!-- Секция коммитов -->
         <section id="commits-section" class="repo-section active">
@@ -77,30 +77,6 @@
                 <p id="commits-error-msg"></p>
             </div>
         </section>
-
-<!--        &lt;!&ndash; Секция файлов (заглушка) &ndash;&gt;-->
-<!--        <section id="files-section" class="repo-section hidden">-->
-<!--            <div class="section-header">-->
-<!--                <h2><i class="fas fa-folder-open"></i> Файлы проекта</h2>-->
-<!--            </div>-->
-<!--            <div class="empty-state">-->
-<!--                <i class="fas fa-folder-open"></i>-->
-<!--                <h3>Просмотр файлов</h3>-->
-<!--                <p>Функционал просмотра файлов будет добавлен в ближайшее время.</p>-->
-<!--            </div>-->
-<!--        </section>-->
-
-<!--        &lt;!&ndash; Секция о проекте (заглушка) &ndash;&gt;-->
-<!--        <section id="about-section" class="repo-section hidden">-->
-<!--            <div class="section-header">-->
-<!--                <h2><i class="fas fa-info-circle"></i> О проекте</h2>-->
-<!--            </div>-->
-<!--            <div class="info-card">-->
-<!--                <div id="about-content">-->
-<!--                    <p>Подробная информация о проекте будет доступна здесь.</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
     </main>
 </div>
 
