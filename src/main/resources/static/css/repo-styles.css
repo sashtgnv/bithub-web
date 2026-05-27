@@ -10,12 +10,6 @@
     margin: 0;
 }
 
-.repo-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
 .repo-header {
     display: flex;
     justify-content: space-between;
@@ -278,10 +272,13 @@
     color: #667eea;
 }
 
-.commit-author,
-.commit-date {
+
+
+.commit-date .commit-author{
     display: flex;
     align-items: center;
     gap: 8px;
     color: #666;
 }
+
+

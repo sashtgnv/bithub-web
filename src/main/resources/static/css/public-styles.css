@@ -3,31 +3,13 @@
 /* Стили для страницы public.html   */
 /* ================================ */
 
-.public-page {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-    min-height: 100vh;
-    padding: 0;
-    margin: 0;
-}
-
 .public-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-.public-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    padding: 20px 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    margin-bottom: 30px;
-}
-
-.public-header .header-left {
+.header-left {
     display: flex;
     align-items: center;
     gap: 15px;

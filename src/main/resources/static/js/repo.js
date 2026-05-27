@@ -36,11 +36,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 1. Привязываем обработчики СРАЗУ, до запроса к API
     deleteBtn.addEventListener('click', () => {
-        modal.classList.remove('hidden');
+        modal.classList.add('show');
         modalError.classList.add('hidden');
     });
 
-    const closeModal = () => modal.classList.add('hidden');
+    const closeModal = () => modal.classList.remove('show');
     cancelBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     confirmBtn.addEventListener('click', async () => {
         confirmBtn.disabled = true;
-        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Удаление...';
+        confirmBtn.textContent = 'Удаление...';
         modalError.classList.add('hidden');
 
         try {
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             modalError.classList.remove('hidden');
         } finally {
             confirmBtn.disabled = false;
-            confirmBtn.innerHTML = '<i class="fas fa-trash"></i> Удалить';
+            confirmBtn.textContent = 'Удалить';
         }
     });
 
@@ -102,14 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (currentUserId && repo.owner?.id && String(currentUserId) === String(repo.owner.id)) {
             ownerActions.classList.remove('hidden');
             modalRepoName.textContent = repo.name;
-
-            // Копируем описание в секцию "О проекте"
-            const aboutContent = document.getElementById('about-content');
-            if (repo.description) {
-                aboutContent.innerHTML = `<p>${Utils.escapeHtml(repo.description)}</p>`;
-            } else {
-                aboutContent.innerHTML = '<p class="meta">Описание отсутствует.</p>';
-            }
         }
 
     } catch (err) {
@@ -126,14 +118,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const commits = await apiFetch(`/proj/${repoId}/commits`);
         loadingCommits.classList.add('hidden');
+        console.log(commits)
 
         if (!commits || commits.length === 0) {
             emptyEl.classList.remove('hidden');
         } else {
             commitsWrapper.classList.remove('hidden');
+
             tbodyEl.innerHTML = commits.map(c => `
                 <tr>
-                    <td><code class="commit-hash" title="${Utils.escapeHtml(c.hash)}">${Utils.escapeHtml(c.hash.substring(0, 8))}</code></td>
+                    <td><code class="commit-hash" title="${Utils.escapeHtml(c.hash)}">${Utils.escapeHtml(c.hash)}</code></td>
                     <td class="commit-message">${Utils.escapeHtml(c.message)}</td>
                     <td class="commit-author"><i class="fas fa-user-circle"></i> ${Utils.escapeHtml(c.author)}</td>
                     <td class="commit-date"><i class="far fa-clock"></i> ${Utils.formatDate(c.createdAt)}</td>
