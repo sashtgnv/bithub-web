@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         editBtn.classList.remove('hidden');
         logoutBtn.classList.remove('hidden');
     } else {
-        titleEl.textContent = 'Профиль пользователя';
+        titleEl.textContent = 'Профиль';
     }
 
     // Загружаем проекты

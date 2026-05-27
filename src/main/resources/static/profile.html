@@ -16,38 +16,39 @@
     <header>
         <div class="header-left">
             <i class="fas fa-code-branch logo-icon"></i>
-            <h1 class="gradient-text">Профиль</h1>
+            <h1 class="gradient-text" id="page-title">Профиль</h1>
         </div>
         <nav class="header-nav">
             <a href="public.html" class="nav-link">
                 <i class="fas fa-globe"></i> Публичные проекты
             </a>
-            <a href="dashboard.html" id="page-title" class="nav-link">
+            <a href="dashboard.html" class="nav-link">
                 <i class="fas fa-globe"></i> Мои проекты
             </a>
-            <a href="edit-profile.html" id="edit-btn" class="btn btn-primary">
-                <i class="fas fa-pencil"></i> Редактировать
+            <a href="edit-profile.html" id="edit-btn" class="btn btn-primary hidden">
+                <i class="fas fa-pencil"></i> <Редактировать></Редактировать>
             </a>
-            <button id="logout-btn" onclick="logout()" class="btn-danger"><i class="fas fa-sign-out-alt"></i>Выйти</button>
+            <button id="logout-btn" onclick="logout()" class="btn-danger hidden"><i class="fas fa-sign-out-alt"></i>Выйти</button>
         </nav>
     </header>
 
     <div class="content">
-        <div style="align-content: center">
-            <div class="avatar-circle">👤</div>
 
-            <h2 id="username-display">Загрузка...</h2>
-            <p id="about-me-display" class="meta"
-               style="max-width:500px; margin:10px auto 0; font-style:italic;"></p>
+
+        <div class="profile-info-card">
+            <div class="avatar-circle-large">👤</div>
+            <h2 id="username-display" class="username-display">Загрузка...</h2>
+            <p id="about-me-display" class="about-me-text"></p>
+
+
+<!--            <p id="about-me-display" class="meta"-->
+<!--               style="max-width:500px; margin:10px auto 0; font-style:italic;"></p>-->
         </div>
 
         <div class="dashboard-content">
             <div class="content-header">
                 <h2><i class="fas fa-folder-open"></i> Список репозиториев</h2>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="repo-search" placeholder="Поиск репозиториев...">
-                </div>
+
             </div>
 
             <div id="repo-list" class="repo-grid">

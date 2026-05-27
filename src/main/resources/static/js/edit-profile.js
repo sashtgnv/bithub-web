@@ -1,30 +1,22 @@
 // Редактирование профиля
 document.addEventListener('DOMContentLoaded', async () => {
-    const form = document.getElementById('profileForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const formMessage = document.getElementById('formMessage');
-    const usernameInput = document.getElementById('username');
-    const emailInput = document.getElementById('email');
-    const fullNameInput = document.getElementById('fullName');
-    const bioInput = document.getElementById('bio');
+    initProfileLink();
+
+    // Корректируем ссылку "Назад", чтобы она вела на профиль с правильным username
+    const username = localStorage.getItem('current_username');
+    // document.getElementById('back-link').href = `profile.html?username=${encodeURIComponent(username)}`;
+    document.getElementById('cancel-link').href = `profile.html?username=${encodeURIComponent(username)}`;
+
+    const form = document.getElementById('profile-form');
+    const submitBtn = document.getElementById('submit-btn');
 
     // Загрузка текущих данных профиля
     try {
-        const response = await fetch('/api/user/profile');
-        if (!response.ok) {
-            if (response.status === 401) {
-                window.location.href = '/';
-                return;
-            }
-            throw new Error('Ошибка загрузки профиля');
-        }
+        const response = await apiFetch('/user/profile');
 
-        const user = await response.json();
-
-        usernameInput.value = user.username || '';
-        emailInput.value = user.email || '';
-        fullNameInput.value = user.fullName || '';
-        bioInput.value = user.bio || '';
+        document.getElementById('username').value = response.username || '';
+        document.getElementById('email').value = response.email || '';
+        document.getElementById('aboutMe').value = response.aboutMe || '';
 
     } catch (err) {
         showFormMessage(`Ошибка загрузки: ${err.message}`, 'error');
@@ -34,26 +26,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Обработка сохранения
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Сохранение...';
         hideFormMessage();
 
         try {
             const payload = {
-                fullName: fullNameInput.value.trim(),
-                bio: bioInput.value.trim()
+                aboutMe: document.getElementById('aboutMe').value
             };
-
-            const response = await fetch('/api/user/profile', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+            const response = await apiFetch('/user/profile', {
+                method: 'POST',
                 body: JSON.stringify(payload)
             });
-
-            if (!response.ok) {
+            if (response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.message || 'Ошибка сохранения');
             }
@@ -62,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Редирект через 1.5 секунды
             setTimeout(() => {
-                window.location.href = '/profile';
+                window.location.href = `profile.html?username=${encodeURIComponent(username)}`;
             }, 1500);
 
         } catch (err) {

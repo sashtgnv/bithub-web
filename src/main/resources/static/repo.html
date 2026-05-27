@@ -16,15 +16,20 @@
 <div class="container">
     <header>
         <div class="header-left">
-            <a href="public.html" class="back-link"><i class="fas fa-arrow-left"></i> Каталог</a>
-            <nav class="breadcrumb">
-                <a href="dashboard.html"><i class="fas fa-folder"></i> Мои проекты</a>
-            </nav>
+            <i class="fas fa-code-branch logo-icon"></i>
+            <h1 class="gradient-text">Репозиторий</h1>
         </div>
-        <div class="header-right">
-            <a href="profile.html" id="profile-link" class="nav-link"><i class="fas fa-user"></i> Профиль</a>
-            <button id="logout-btn" class="btn-danger"><i class="fas fa-sign-out-alt"></i> Выйти</button>
-        </div>
+        <nav class="header-nav">
+            <a href="public.html" class="nav-link">
+                <i class="fas fa-globe"></i> Публичные проекты
+            </a>
+            <a href="dashboard.html" class="nav-link">
+                <i class="fas fa-folder"></i> Мои проекты
+            </a>
+            <a id="profile-link" href="profile.html" class="nav-link">
+                <i class="fas fa-user"></i> Профиль
+            </a>
+        </nav>
     </header>
 
     <main>
@@ -81,7 +86,7 @@
 </div>
 
 <!-- Модальное окно подтверждения удаления -->
-<div id="delete-modal" class="modal hidden">
+<div id="delete-modal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <i class="fas fa-exclamation-triangle modal-icon"></i>

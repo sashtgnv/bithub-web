@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     requireAuth();
     initProfileLink();
 
-    document.getElementById('logout-btn').addEventListener('click', logout);
-
     const params = new URLSearchParams(window.location.search);
     const repoId = params.get('id');
     if (!repoId) {
@@ -89,11 +87,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="cli-box">
                 <div class="cli-header">
                     <strong><i class="fas fa-terminal"></i> Команда для клонирования:</strong>
-                    <button class="btn-copy" onclick="navigator.clipboard.writeText('clone /api/proj/${repo.id}')">
+                    <button class="btn-copy" onclick="navigator.clipboard.writeText('clone ${repo.id}')">
                         <i class="fas fa-copy"></i> Копировать
                     </button>
                 </div>
-                <code>clone /api/proj/${repo.id}</code>
+                <code>clone ${repo.id}</code>
             </div>
         `;
 
@@ -118,7 +116,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const commits = await apiFetch(`/proj/${repoId}/commits`);
         loadingCommits.classList.add('hidden');
-        console.log(commits)
 
         if (!commits || commits.length === 0) {
             emptyEl.classList.remove('hidden');
